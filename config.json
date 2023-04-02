@@ -1,0 +1,9 @@
+{
+    "port": 80,
+    "stripe_api_key":"sk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "currency":"usd",
+    "success_url":"http://localhost/success",
+    "cancel_url":"http://localhost/canceled",
+    "payment_method_types":["card"],
+    "title":"My Awesome Store"
+}

@@ -1,0 +1,29 @@
+<head>
+<title>Checking Out...</title>
+<link rel="stylesheet" href="/style">
+</head>
+
+Working...
+
+<script>
+window.onload = () => {
+let cart = sessionStorage.getItem('cart');
+if(cart) cart = JSON.parse(cart);
+else return location = '/'
+
+let url = `/buy/`
+
+cart.forEach(item => {
+url += `${item.product}-${item.quantity}|`
+})
+
+
+url = url.slice(0, -1)
+
+
+sessionStorage.clear()
+location = url
+}
+
+
+</script>

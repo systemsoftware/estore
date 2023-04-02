@@ -1,0 +1,65 @@
+<head>
+<link rel="stylesheet" href="/style">
+</head>
+
+
+<div onclick="location='/checkout'" style="position: fixed; top: 0; right: 0;padding-right: 10px;background-color: aliceblue;padding-left: 10px;border-bottom-left-radius: 10px;cursor: pointer;">Checkout</div>
+
+<h2 id="title">Products</h2>
+<div id="products-list"></div>
+
+
+<script>
+fetch('/products').then(req => req.json().then(data => {
+  const products = data
+  console.log(products);
+  const productsList = document.getElementById('products-list');
+  products.forEach(product => {
+    const div = document.createElement('div');
+    const temp_id = Math.random().toString(36).substring(7);
+    let cart = sessionStorage.getItem('cart');
+    if(cart) cart = JSON.parse(cart);
+    const _in = cart ? cart.find(item => item.product == product.name) : false;
+    div.className = 'product';
+    div.innerHTML = `
+    <h2>${product.name}</h2>
+    <p>${product.description}</p>
+    <button id=${temp_id} mode="${_in ? 'remove' : 'add'}" onclick="add_to_cart('${product.name}', '${temp_id}')" mode="add"> ${_in ? `Remove ${cart.find(item => item.product == product.name).quantity} from cart` : 'Add to cart'}</button>
+    `;
+    productsList.appendChild(div);
+  });
+}));
+
+fetch('/title').then(req => req.text().then(data => {
+document.title = data;
+document.getElementById('title').innerHTML = data;
+}));
+
+const add_to_cart = (product, bttn) => {
+const cart = sessionStorage.getItem('cart');
+const b = document.getElementById(bttn)
+if(b.getAttribute('mode') === 'remove') {
+  if (cart) {
+    const cartItems = JSON.parse(cart);
+    const newCartItems = cartItems.filter(item => item.product !== product);
+    sessionStorage.setItem('cart', JSON.stringify(newCartItems));
+  }
+  b.innerHTML = `Add to cart`;
+  b.setAttribute('mode', 'add');
+  return;
+}else{
+const quantity = prompt('How many?')
+if(!quantity) return alert('Canceled');
+if (cart) {
+  const cartItems = JSON.parse(cart);
+  cartItems.push({product, quantity});
+  sessionStorage.setItem('cart', JSON.stringify(cartItems));
+} else {
+  sessionStorage.setItem('cart', JSON.stringify([{product, quantity}]));
+}
+b.innerHTML = `Remove ${quantity} from cart`;
+b.setAttribute('mode', 'remove');
+console.log(b.getAttribute('mode'))
+}
+}
+</script>
